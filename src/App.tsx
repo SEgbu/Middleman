@@ -1,5 +1,6 @@
-import { useEffect, useRef } from "react";
-import { v4 as uuid} from "uuid";;
+import { useRef } from "react";
+import { v4 as uuid} from "uuid";
+import { Query } from "./Query";
 
 export const App = () => {
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -9,7 +10,7 @@ export const App = () => {
 			let value = inputRef.current.value;
 
 			if (value != "")
-				sessionStorage.setItem(uuid(), JSON.stringify({queryData: value}));
+				sessionStorage.setItem(uuid(), value);
 
 			inputRef.current.value = "";
 		}
@@ -22,17 +23,19 @@ export const App = () => {
 	}
 
     return ( 
-		<>
+		<div>
+			{Object.keys(sessionStorage).map((id) => {
+				return (
+					<Query key={id} id={id} content={sessionStorage.getItem(id) as string}/>
+				)
+			})}
+
 			<form onSubmit={handleSubmit}>
 				<input type="text" ref={inputRef}/>
 				<button onClick={handleClear}>Clear</button>
 				<input type="submit"/>
 			</form>
-				
-			{Object.keys(sessionStorage).map((x) => {
-				return <p key={x}>{sessionStorage.getItem(x)}</p>
-			})}
-		</>
+		</div>
 	);
 }
 
