@@ -1,10 +1,10 @@
 type QueryType = {
     id: string;
-    content: string; 
+    content: string;
 };
 
-export const Query = (props : QueryType) => {
-    const {content} = props;
+export const Query = (props: QueryType) => {
+    const { content } = props;
 
     return (
         <div>

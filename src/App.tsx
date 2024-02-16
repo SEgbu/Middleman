@@ -3,18 +3,18 @@ import { QueryInput } from "./QueryInput";
 import { v4 as isUuid } from "is-uuid";
 
 export const App = () => {
-    return ( 
+	return (
 		<div>
 			{Object.keys(sessionStorage).map((id) => {
 				return (
-					<>
-						{isUuid(id) ? <Query key={id} id={id} content={sessionStorage.getItem(id) as string}/> : null}
-					</>
+					<div key={id}>
+						{isUuid(id) ? <Query id={id} content={sessionStorage.getItem(id) as string} /> : null}
+					</div>
 				)
 			})}
-			
 
-			<QueryInput/>
+
+			<QueryInput />
 		</div>
 	);
 }
