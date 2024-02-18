@@ -8,7 +8,7 @@ export const App = () => {
 			{Object.keys(sessionStorage).map((id) => {
 				return (
 					<div key={id}>
-						{isUuid(id) ? <Query id={id} content={sessionStorage.getItem(id) as string} /> : null}
+						{isUuid(id) ? <Query id={id} data={sessionStorage.getItem(id) as string} /> : null}
 					</div>
 				)
 			})}
