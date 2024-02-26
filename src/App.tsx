@@ -2,7 +2,11 @@ import { Query } from "./Query";
 import { QueryInput } from "./QueryInput";
 import { v4 as isUuid } from "is-uuid";
 
+import supabase from "../config/Supabase";
+
 export const App = () => {
+	console.log(supabase);
+
 	return (
 		<div>
 			{Object.keys(sessionStorage).map((id) => {
