@@ -8,38 +8,44 @@ export const QueryInput = () => {
 
 	const [formError, setFormError] = useState<string>("");
 
-	const handleSubmit = async () => {		
+	const handleSubmit = async () => {	
+		
 		if (queryRef.current && descriptionRef.current){
-
 			let query = queryRef.current.value;
 			let description = descriptionRef.current.value;
 
-			const {error} = await supabase
-										.from("queries")
-										.insert([{query, description}]);
-
+			
 			if (queryRef.current.value != ""){
-				queryRef.current.value = "";
-				setFormError("");
-				descriptionRef.current.value = "";
-			}
-			else {
+				const {error} = await supabase
+											.from("queries")
+											.insert([{query, description}]);
+											
 				if (error) {
 					console.log(error);
 				}
+
+				queryRef.current.value = "";
+				descriptionRef.current.value = "";
+
+				setFormError("");
+			}
+			else {
+				event?.preventDefault();
 				setFormError("Please fill out query");
 			}
 		}
-		else 
-			alert("error");
 	}
 
 
     return (
         <form onSubmit={handleSubmit}>
-			<p>{formError}</p>
-            <input type="text" ref={queryRef}/>
-			<input type="text" ref={descriptionRef} />
+			<p style={{color: "red"}}>{formError}</p>
+			<label htmlFor="query">Query: </label>
+            <input type="text" id="query" ref={queryRef}/>
+			<br />
+			<label htmlFor="description">Description: </label>
+			<input type="text" id="description" ref={descriptionRef} />
+			<br />
             <input type="submit"/>
         </form>
     )
