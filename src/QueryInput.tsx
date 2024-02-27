@@ -1,35 +1,45 @@
 import { useRef } from "react";
-import { v4 as uuid } from "uuid";
+import { useState } from "react";
+import supabase from "../config/Supabase";
 
 export const QueryInput = () => {
-    const inputRef = useRef<HTMLInputElement>(null);
+    const queryRef = useRef<HTMLInputElement>(null);
 	const descriptionRef = useRef<HTMLInputElement>(null);
 
-	const handleSubmit = () => {
-		if (inputRef.current){
-			let data = {query: inputRef.current.value, description: descriptionRef.current?.value};
+	const [formError, setFormError] = useState<string>("");
 
-			if (data.query != "")
-				sessionStorage.setItem(uuid(), JSON.stringify(data));
+	const handleSubmit = async () => {		
+		if (queryRef.current && descriptionRef.current){
 
-			inputRef.current.value = "";
-			
-			if (descriptionRef.current)
+			let query = queryRef.current.value;
+			let description = descriptionRef.current.value;
+
+			const {error} = await supabase
+										.from("queries")
+										.insert([{query, description}]);
+
+			if (queryRef.current.value != ""){
+				queryRef.current.value = "";
+				setFormError("");
 				descriptionRef.current.value = "";
+			}
+			else {
+				if (error) {
+					console.log(error);
+				}
+				setFormError("Please fill out query");
+			}
 		}
 		else 
 			alert("error");
 	}
 
-	const handleClear = () => {
-		sessionStorage.clear();
-	}
 
     return (
         <form onSubmit={handleSubmit}>
-            <input type="text" ref={inputRef}/>
+			<p>{formError}</p>
+            <input type="text" ref={queryRef}/>
 			<input type="text" ref={descriptionRef} />
-            <button onClick={handleClear}>Clear</button>
             <input type="submit"/>
         </form>
     )
