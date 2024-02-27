@@ -1,19 +1,39 @@
 import { Query } from "./Query";
 import { QueryInput } from "./QueryInput";
-import { v4 as isUuid } from "is-uuid";
+
+import supabase from "../config/Supabase";
+import { useEffect, useState } from "react";
 
 export const App = () => {
+	const [errorMessage, setErrorMessage] = useState<string>("");
+	const [queries, setQueries] = useState<any[]>([]);
+	
+	useEffect(() => {
+		const fetchFromDatabase = async () => {
+			const {data, error} = await supabase
+										.from("queries")
+										.select();
+
+			if (error){
+				setErrorMessage("Couldn't fetch from queries");
+				setQueries([]);
+				console.log(errorMessage + ": " + error);
+			}
+			else if (data){
+				setErrorMessage("");
+				setQueries(data);
+			}
+		} 
+		fetchFromDatabase();
+	}, []);	
+
 	return (
 		<div>
-			{Object.keys(sessionStorage).map((id) => {
-				return (
-					<div key={id}>
-						{isUuid(id) ? <Query id={id} data={sessionStorage.getItem(id) as string} /> : null}
-					</div>
-				)
+			{errorMessage && <p>{errorMessage}</p>}
+			{queries && queries.map((q) => {
+				return <Query key={q.id} data={q} />
 			})}
-
-
+			
 			<QueryInput />
 		</div>
 	);
