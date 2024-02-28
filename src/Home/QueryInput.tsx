@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useState } from "react";
-import supabase from "../config/Supabase";
+import supabase from "../../config/Supabase";
 
 export const QueryInput = () => {
     const queryRef = useRef<HTMLInputElement>(null);
@@ -9,8 +9,9 @@ export const QueryInput = () => {
 	const [formError, setFormError] = useState<string>("");
 
 	const handleSubmit = async () => {	
-		
+		event?.preventDefault();
 		if (queryRef.current && descriptionRef.current){
+
 			let query = queryRef.current.value;
 			let description = descriptionRef.current.value;
 
@@ -21,16 +22,17 @@ export const QueryInput = () => {
 											.insert([{query, description}]);
 											
 				if (error) {
-					console.log(error);
+					console.log(error.message);
 				}
 
 				queryRef.current.value = "";
 				descriptionRef.current.value = "";
 
 				setFormError("");
+
+				window.location.reload();
 			}
 			else {
-				event?.preventDefault();
 				setFormError("Please fill out query");
 			}
 		}
