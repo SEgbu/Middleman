@@ -7,6 +7,13 @@ import { useEffect, useState } from "react";
 export const Home = () => {
 	const [errorMessage, setErrorMessage] = useState<string>("");
 	const [queries, setQueries] = useState<any[]>([]);
+
+	// handling deletion of query before refresh
+	const handleRemove = (id : number) => {
+		setQueries(currentQueries => {
+			return currentQueries.filter(q => q.id !== id);
+		})
+	}
 	
 	// fetch query data
 	useEffect(() => {
@@ -33,7 +40,7 @@ export const Home = () => {
 		<div>
 			{errorMessage && <p>{errorMessage}</p>}
 			{queries && queries.map((q) => {
-				return <Query key={q.id} data={q} />
+				return <Query key={q.id} data={q} onRemove={handleRemove}/>
 			})}
 			
 			<QueryInput />

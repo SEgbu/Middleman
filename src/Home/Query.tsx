@@ -4,10 +4,11 @@ import supabase from "../../config/Supabase";
 
 type QueryType = {
     data: any;
+    onRemove: (id: number) => void;
 };
 
 export const Query = (props: QueryType) => {
-    const { data } = props;
+    const { data, onRemove } = props;
 
     const [isInfoShown, setInfoShown] = useState(false);
 
@@ -24,8 +25,7 @@ export const Query = (props: QueryType) => {
             console.log(queryRemoveError + ": " + error.message);
         }
         else {
-            console.log("refresh");
-            window.location.reload();
+            onRemove(data.id);
         }
     }
 
