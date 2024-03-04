@@ -21,7 +21,7 @@ export const Home = () => {
 			const {data, error} = await supabase
 										.from("queries")
 										.select()
-										.order("id", {ascending: true});
+										.order("created_at", {ascending: true});
 
 			if (error){
 				setErrorMessage("Couldn't fetch from queries");
@@ -33,6 +33,7 @@ export const Home = () => {
 				setQueries(data);
 			}
 		} 
+		
 		fetchFromDatabase();
 	}, []);	
 

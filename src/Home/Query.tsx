@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import supabase from "../../config/Supabase";
 
@@ -7,12 +7,19 @@ type QueryType = {
     onRemove: (id: number) => void;
 };
 
+type submissionDataType = {
+    filePath: string; 
+    queryId: number;
+};
+
 export const Query = (props: QueryType) => {
     const { data, onRemove } = props;
 
     const [isInfoShown, setInfoShown] = useState(false);
 
     const [queryRemoveError, setQueryRemoveError] = useState<string>("");
+
+    const submissionRef = useRef<HTMLInputElement>(null);
 
     const handleRemove = async () => {
         const {error} = await supabase
@@ -26,6 +33,24 @@ export const Query = (props: QueryType) => {
         }
         else {
             onRemove(data.id);
+        }
+    }
+
+    const handleSubmission = async () => {
+
+        if (submissionRef.current && submissionRef.current.files){
+            let submissionData : submissionDataType = {
+                filePath: "public/"+submissionRef.current.files[0].name,
+                queryId: data.id
+            }
+
+            const {error} = await supabase
+                                        .from("submissions")
+                                        .insert({filePath: submissionData.filePath, queryId: submissionData.queryId});
+
+            if (error){
+                console.log("Submission Error: " + error.message);
+            }
         }
     }
 
@@ -49,7 +74,6 @@ export const Query = (props: QueryType) => {
             }
             <button onClick={handleRemove}>Remove</button>
             <Link to="/edit" state={data}><button>Edit</button></Link>
-
-        </div>
+            <input type="file" ref={submissionRef} onChange={handleSubmission}/>        </div>
     )
 }
