@@ -44,25 +44,58 @@ export const Query = (props: QueryType) => {
     }, [])
 
     const handleRemove = async () => {
-        const { error } = await supabase
+        const { error : errorInSubmissionDatabase} = await supabase 
+                                .from("submissions")
+                                .delete()
+                                .eq("queryId", data.id);
+
+        if(errorInSubmissionDatabase) {
+            console.log("Deletion Error in Submission Database: "+ errorInSubmissionDatabase.message);
+        }
+
+        const { data : listOfSubmissionData, error : listOfSubmissionsError } = await supabase
+                                                                    .storage
+                                                                    .from('submissions')
+                                                                    .list(data.id, {
+                                                                        limit: 100,
+                                                                        offset: 0,
+                                                                        sortBy: { column: 'name', order: 'asc' },
+                                                                    })
+
+        if (listOfSubmissionsError) {
+            console.log("Couldn't print out list of submission in storage: " + listOfSubmissionsError);
+        }
+        else if (listOfSubmissionData){
+            const { error : errorInStorage } = await supabase
+                                            .storage
+                                            .from('submissions')
+                                            .remove(listOfSubmissionData.map(sd => data.id + "/" + sd.name));
+            
+            if (errorInStorage) {
+                console.log("Deletion error for storage bucket: "+ errorInStorage.message);
+            }
+        }
+
+        const { error : errorInQueryDatabase} = await supabase
             .from("queries")
             .delete()
             .eq("id", data.id);
 
-        if (error) {
+        if (errorInQueryDatabase) {
             setQueryRemoveError("Can't remove query");
-            console.log(queryRemoveError + ": " + error.message);
+            console.log(queryRemoveError + ": " + errorInQueryDatabase.message);
         }
         else {
             onRemove(data.id);
         }
+    
     }
 
     const handleSubmission = async () => {
         // insert submission info and upload submission file to storage
         if (submissionRef.current && submissionRef.current.files) {
             let submissionData: submissionDataType = {
-                filePath: "public/" + submissionRef.current.files[0].name,
+                filePath: data.id +"/" + submissionRef.current.files[0].name,
                 queryId: data.id
             }
 
