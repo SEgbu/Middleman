@@ -17,8 +17,6 @@ export const Query = (props: QueryType) => {
 
     const [isInfoShown, setInfoShown] = useState(false);
 
-    const [queryRemoveError, setQueryRemoveError] = useState<string>("");
-
     const [submissionsCount, setSubmissionCount] = useState<number>(0);
 
     const submissionRef = useRef<HTMLInputElement>(null);
@@ -82,8 +80,7 @@ export const Query = (props: QueryType) => {
             .eq("id", data.id);
 
         if (errorInQueryDatabase) {
-            setQueryRemoveError("Can't remove query");
-            console.log(queryRemoveError + ": " + errorInQueryDatabase.message);
+            console.log("Can't remove query: " + errorInQueryDatabase.message);
         }
         else {
             onRemove(data.id);

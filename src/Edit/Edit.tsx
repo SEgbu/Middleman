@@ -6,7 +6,6 @@ export const Edit = () => {
     let { state } = useLocation();
     const id = state.id;
 
-    const [queryRecordError, setQueryRecordError] = useState<string>("");
     const [updateQueryError, setUpdateQueryError] = useState<string>("");
 
     const [queryInput, setQueryInput] = useState<string>("");
@@ -23,15 +22,12 @@ export const Edit = () => {
                                         .single()
 
             if (error){
-                setQueryRecordError("Can't retrieve single record");
-                console.log(queryRecordError + ": " + error.message);
+                console.log("Can't retrieve single record: " + error.message);
 
                 setQueryInput("");
                 setDescriptionInput("");
             }
             else if (data){
-                setQueryRecordError("");
-
                 setQueryInput(data.query);
                 setDescriptionInput(data.description);
             }
