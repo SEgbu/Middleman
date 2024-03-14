@@ -12,6 +12,7 @@ export const QueryWindow = (props : QueryWindowProps) => {
         <>
             {/* TODO: Check for empty field and don't allow submit if so */}
             {/* TODO: If max people field is empty then create another block of jsx saying btw max people will be set to infinity */}
+            {/* BUG: Not filling the inputs correctly will make error text appear where the quick queries are not the full queries */}
             <form onSubmit={handleSubmit}>
                 <label htmlFor="queryWindowTitle">Query: </label>
                 <input type="text" id="queryWindowTitle" onChange={(e) => setQueryData(qd => ({...qd, query: e.target.value}))}/>

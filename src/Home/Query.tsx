@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import supabase from "../../config/Supabase";
+import { AddLinks } from "../components/AddLinks.tsx";
 
 type QueryType = {
     data: any;
@@ -120,6 +121,7 @@ export const Query = (props: QueryType) => {
     }
 
     // TODO: Links should be clickable in description
+
     // TODO: Solvers should be able to submit a message with their details
     return (
         <div>
@@ -135,7 +137,7 @@ export const Query = (props: QueryType) => {
                     </button>
 
 
-                    {(isInfoShown) && <p>{data.description}</p>}
+                    {(isInfoShown) && <AddLinks text={data.description}/>}
 
                 </>
             }
@@ -145,6 +147,8 @@ export const Query = (props: QueryType) => {
             <span> | Reward: {data.reward }</span>
             <span> | Max People: {data.maxPeople == (null || 0 || undefined) ? "Infinity" : data.maxPeople} | </span>
             <input type="file" id="submission" ref={submissionRef} onChange={handleSubmission} />
+            <br></br>
+            <br></br>
         </div>
     )
 }

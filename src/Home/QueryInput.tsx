@@ -9,6 +9,8 @@ export interface queryDataType {
 	reward?: number;
 };
 
+// BUG: Submitting the description from a text area doesn't keep its format when viewing query description
+
 export const QueryInput = () => {
 	const [queryData, setQueryData] = useState<queryDataType>({});
 
@@ -19,7 +21,6 @@ export const QueryInput = () => {
 	useEffect(() => {
 		if (queryData.reward == null || queryData.reward === undefined) {
 			setQueryData(qd => ({...qd, reward: 5}));
-			console.log(queryData.reward);
 		}
 	}, [])
 
