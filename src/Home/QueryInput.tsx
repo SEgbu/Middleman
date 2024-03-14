@@ -1,54 +1,67 @@
-import { useRef } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import supabase from "../../config/Supabase";
+import { QueryWindow } from "./QueryWindow";
+
+export interface queryDataType {
+	query?: string; 
+	description?: string;
+	maxPeople?: number; 
+	reward?: number;
+};
 
 export const QueryInput = () => {
-    const queryRef = useRef<HTMLInputElement>(null);
-	const descriptionRef = useRef<HTMLInputElement>(null);
+	const [queryData, setQueryData] = useState<queryDataType>({});
 
 	const [formError, setFormError] = useState<string>("");
 
-	const handleSubmit = async () => {	
-		event?.preventDefault();
-		if (queryRef.current && descriptionRef.current){
+	const [isQueryWindowOpen, setQueryWindowOpen] = useState<boolean>(false);
 
-			let query = queryRef.current.value;
-			let description = descriptionRef.current.value;
-
-			
-			if (queryRef.current.value != ""){
-				const {error} = await supabase
-											.from("queries")
-											.insert([{query, description}]);
-											
-				if (error) {
-					console.log(error.message);
-				}
-
-				queryRef.current.value = "";
-				descriptionRef.current.value = "";
-
-				setFormError("");
-
-				window.location.reload();
-			}
-			else {
-				setFormError("Please fill out query");
-			}
+	useEffect(() => {
+		if (queryData.reward == null || queryData.reward === undefined) {
+			setQueryData(qd => ({...qd, reward: 5}));
+			console.log(queryData.reward);
 		}
+	}, [])
+
+	const handleSubmit = async () => {
+		event?.preventDefault();
+
+		if (queryData.query != ("" || null) ) {
+			const { error } = await supabase
+				.from("queries")
+				.insert([{ query: queryData.query , description: queryData.description, maxPeople: queryData.maxPeople, reward: queryData.reward }]);
+
+			if (error) {
+				console.log(error.message);
+			}
+
+			setFormError("");
+			setQueryData({});
+
+			window.location.reload();
+
+		}
+		else {
+			setFormError("Please fill out query");
+		}
+		
 	}
 
-
-    return (
-        <form onSubmit={handleSubmit}>
-			<p style={{color: "red"}}>{formError}</p>
-			<label htmlFor="query">Query: </label>
-            <input type="text" id="query" ref={queryRef}/>
-			<br />
-			<label htmlFor="description">Description: </label>
-			<input type="text" id="description" ref={descriptionRef} />
-			<br />
-            <input type="submit"/>
-        </form>
-    )
+	return (
+		<div>
+			<form onSubmit={handleSubmit}>
+				<p>Quick Queries: </p>
+				<p style={{ color: "red" }}>{formError}</p>
+				<label htmlFor="query">Query: </label>
+				<input type="text" id="query" onChange={(e) => setQueryData(qd => ({...qd, query: e.target.value}))} />
+				<br />
+				<input type="submit" />
+			</form>
+			<div>
+				<p>Full Queries: </p>
+				<button onClick={() => { setQueryWindowOpen(!isQueryWindowOpen) }}>Open</button>
+				{isQueryWindowOpen && <QueryWindow setQueryData={setQueryData} handleSubmit={handleSubmit}/>}
+			</div>
+		</div>
+	)
 }

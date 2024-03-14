@@ -63,7 +63,7 @@ export const Query = (props: QueryType) => {
         if (listOfSubmissionsError) {
             console.log("Couldn't print out list of submission in storage: " + listOfSubmissionsError);
         }
-        else if (listOfSubmissionData){
+        else if (listOfSubmissionData.length > 0){
             const { error : errorInStorage } = await supabase
                                             .storage
                                             .from('submissions')
@@ -119,12 +119,14 @@ export const Query = (props: QueryType) => {
         }
     }
 
+    // TODO: Links should be clickable in description
+    // TODO: Solvers should be able to submit a message with their details
     return (
         <div>
             <label htmlFor="info">{data.query} </label>
 
             {
-                data.description != "" &&
+                data.description != ("" || null) &&
                 <>
                     <button id="info" onClick={() => {
                         setInfoShown(!isInfoShown);
@@ -139,7 +141,9 @@ export const Query = (props: QueryType) => {
             }
             <button onClick={handleRemove}>Remove</button>
             <Link to="/edit" state={data}><button>Edit</button></Link>
-            <span> Submission Counter: {submissionsCount} </span>
+            <span> | Submission Counter: {submissionsCount} </span>
+            <span> | Reward: {data.reward }</span>
+            <span> | Max People: {data.maxPeople == (null || 0 || undefined) ? "Infinity" : data.maxPeople} | </span>
             <input type="file" id="submission" ref={submissionRef} onChange={handleSubmission} />
         </div>
     )
