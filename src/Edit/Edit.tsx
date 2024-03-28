@@ -47,8 +47,7 @@ export const Edit = () => {
         }
         else {
             setUpdateQueryError("");
-            console.log("navigating to home")
-            navigate("/");
+            navigate("/myqueries")
         }
     }
 
