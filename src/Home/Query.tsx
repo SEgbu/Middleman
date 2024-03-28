@@ -153,7 +153,7 @@ export const Query = (props: QueryType) => {
             <span> | Reward: {data.reward}</span>
             <span> | Max People: {data.maxPeople == (null || 0 || undefined) ? "Infinity" : data.maxPeople} | </span>
             {
-                data.userId == userId &&
+                data.userId != userId &&
                 <input type="file" id="submission" ref={submissionRef} onChange={handleSubmission} />
             }
             <br></br>
