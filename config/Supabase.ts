@@ -6,9 +6,8 @@ const supabaseKey: string | undefined = import.meta.env.VITE_KEY;
 
 let supabase : SupabaseClient;
 
-if (supabaseKey && supabaseUrl) {
+if (supabaseKey && supabaseUrl) 
     supabase = createClient(supabaseUrl, supabaseKey);
-}
 else {
     throw new Error("Supabase key or url is not provided")
 }

@@ -15,10 +15,12 @@ export const AddLinks = (props : addLinksType) => {
             if(!withProtocol.startsWith("http")) {
                 withProtocol = "http://" + matched;
             }
-           
+            
+            // BUG: DOM Purify is not allowing links to be open in new tabs
             const newStr = `<a
-                class="text-link"
-                href="${withProtocol}"
+                rel="noreferrer noopener"
+                target="_blank"
+                href="${withProtocol}/"
             >
                 ${matched}
             </a>`;
