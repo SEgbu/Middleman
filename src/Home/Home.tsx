@@ -69,7 +69,7 @@ export const Home = () => {
 				<>
 					{errorMessage && <p>{errorMessage}</p>}
 					{queries && queries.map((q) => {
-						return <Query key={q.id} data={q} onRemove={handleRemove} />
+						return <Query key={q.id} data={q} onRemove={handleRemove} userId={user?.id}/>
 					})}
 
 					<QueryInput userId={user?.id}/>

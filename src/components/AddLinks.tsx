@@ -7,8 +7,7 @@ type addLinksType = {
 export const AddLinks = (props : addLinksType) => {
     const {text} = props;
 
-        //BUG: http links dont work just https
-        const linkRegex : RegExp = /(http(|s)?\:\/\/)?(www\.)?[^\s]+\.[^\s]+/g;
+        const linkRegex : RegExp = /(https?\:\/\/)?(www\.)?[^\s]+\.[^\s]+/g;
 
         const replacer = (matched : string) => {
             let withProtocol = matched;

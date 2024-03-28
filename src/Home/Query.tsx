@@ -6,6 +6,7 @@ import { AddLinks } from "../components/AddLinks.tsx";
 type QueryType = {
     data: any;
     onRemove: (id: number) => void;
+    userId: string | undefined;
 };
 
 type submissionDataType = {
@@ -14,7 +15,7 @@ type submissionDataType = {
 };
 
 export const Query = (props: QueryType) => {
-    const { data, onRemove } = props;
+    const { data, onRemove, userId } = props;
 
     const [isInfoShown, setInfoShown] = useState(false);
 
@@ -141,12 +142,20 @@ export const Query = (props: QueryType) => {
 
                 </>
             }
-            <button onClick={handleRemove}>Remove</button>
-            <Link to="/edit" state={data}><button>Edit</button></Link>
+            { 
+                data.userId == userId &&
+                <>
+                <button onClick={handleRemove}>Remove</button>
+                <Link to="/edit" state={data}><button>Edit</button></Link>
+                </>
+            }
             <span> | Submission Counter: {submissionsCount} </span>
-            <span> | Reward: {data.reward }</span>
+            <span> | Reward: {data.reward}</span>
             <span> | Max People: {data.maxPeople == (null || 0 || undefined) ? "Infinity" : data.maxPeople} | </span>
-            <input type="file" id="submission" ref={submissionRef} onChange={handleSubmission} />
+            {
+                data.userId == userId &&
+                <input type="file" id="submission" ref={submissionRef} onChange={handleSubmission} />
+            }
             <br></br>
             <br></br>
         </div>
