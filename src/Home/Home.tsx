@@ -4,11 +4,12 @@ import { QueryInput } from "./QueryInput";
 import supabase from "../../config/Supabase";
 import { useEffect, useState } from "react";
 import { SignOut } from "../components/SignOut";
+import { User } from "@supabase/supabase-js";
 
 export const Home = () => {
 	const [errorMessage, setErrorMessage] = useState<string>("");
 	const [queries, setQueries] = useState<any[]>([]);
-	const [user, setUser] = useState<Object | null>(null);
+	const [user, setUser] = useState<User | null>(null);
 
 	// fetch query data
 	useEffect(() => {
@@ -51,7 +52,7 @@ export const Home = () => {
 		}
 		}
 		else {
-			setUser({});
+			setUser(null);
 		}
 	})
 
@@ -71,7 +72,7 @@ export const Home = () => {
 						return <Query key={q.id} data={q} onRemove={handleRemove} />
 					})}
 
-					<QueryInput />
+					<QueryInput userId={user?.id}/>
 					<SignOut />
 				</>
 			}

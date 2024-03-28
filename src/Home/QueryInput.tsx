@@ -9,9 +9,13 @@ export interface queryDataType {
 	reward?: number;
 };
 
+type queryInputType = {
+	userId: string | undefined;
+}
+
 // BUG: Submitting the description from a text area doesn't keep its format when viewing query description
 
-export const QueryInput = () => {
+export const QueryInput = (props: queryInputType) => {
 	const [queryData, setQueryData] = useState<queryDataType>({});
 
 	const [formError, setFormError] = useState<string>("");
@@ -30,7 +34,7 @@ export const QueryInput = () => {
 		if (queryData.query != ("" || null) ) {
 			const { error } = await supabase
 				.from("queries")
-				.insert([{ query: queryData.query , description: queryData.description, maxPeople: queryData.maxPeople, reward: queryData.reward }]);
+				.insert([{ query: queryData.query , description: queryData.description, maxPeople: queryData.maxPeople, reward: queryData.reward, userId: props.userId}]);
 
 			if (error) {
 				console.log(error.message);

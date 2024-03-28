@@ -4,8 +4,7 @@ import supabase from "../../config/Supabase";
 import { queryDataType } from "../Home/QueryInput";
 
 export const Edit = () => {
-    // BUG: Max people, reward cant be negative when submitting
-    // BUG: Textarea shouldn't be set to null
+
 
     let { state } = useLocation();
     const { id } = state;
