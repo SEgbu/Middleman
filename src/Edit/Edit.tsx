@@ -68,7 +68,9 @@ export const Edit = () => {
                 <input type="number" id="reward" value={(newQueryData.reward == null) ? "" : newQueryData.reward} onChange={(event) => setNewQueryData(qd => ({ ...qd, reward: (Number(event.target.value) < 0) ? 0 : Number(event.target.value) }))} />
                 <br />
                 <input type="submit" />
-                <Link to="/"><button>Cancel</button></Link>
+                <Link to="/"><button>Go Back Home</button></Link>
+                <Link to="/myqueries"><button>Go to My Queries</button></Link>
+
             </form>
         </>
     )
