@@ -5,11 +5,13 @@ import supabase from "../../config/Supabase";
 import { useEffect, useState } from "react";
 import { SignOut } from "../components/SignOut";
 import { User } from "@supabase/supabase-js";
+import { useNavigate } from "react-router-dom";
 
 export const Home = () => {
 	const [errorMessage, setErrorMessage] = useState<string>("");
 	const [queries, setQueries] = useState<any[]>([]);
 	const [user, setUser] = useState<User | null>(null);
+	const navigate = useNavigate();
 
 	// fetch query data
 	useEffect(() => {
@@ -56,6 +58,7 @@ export const Home = () => {
 		}
 	})
 
+	// TODO: Make handle remove a utility function
 	// handling deletion of query before refresh
 	const handleRemove = (id: number) => {
 		setQueries(currentQueries => {
@@ -74,6 +77,7 @@ export const Home = () => {
 
 					<QueryInput userId={user?.id}/>
 					<SignOut />
+					<button onClick={() => navigate("/myqueries")}>My Queries</button>
 				</>
 			}
 		</div>

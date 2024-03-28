@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Home } from "./Home/Home";
 import { Edit } from "./Edit/Edit";
 import { SignIn } from "./SignIn/SignIn";
+import { myQueries } from "./myQueries/myQueries";
 
 const App = () => {
 
@@ -11,6 +12,7 @@ const App = () => {
 				<Route path="/" Component={Home} ></Route>
 				<Route path="/edit" Component={Edit}></Route>
 				<Route path="/signin" Component={SignIn}></Route>
+				<Route path="/myqueries" Component={myQueries}></Route>
 			</Routes>
 		</BrowserRouter>
 	);
